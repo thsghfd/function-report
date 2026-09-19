@@ -572,9 +572,11 @@ function openInNewTab(html){
 async function deliverReport(mode){
   const { blob, filename, html } = buildFile();
 
-  // Best path on phones: native share sheet with the file attached.
-  // On iOS this opens Mail / Files / AirDrop with the doc already attached.
-  if (navigator.canShare) {
+  // Best path on iPhones/iPads: native share sheet with the file attached,
+  // since iOS Safari ignores the download attribute and cancels downloads
+  // on navigation. Android keeps the classic download + mailto flow below,
+  // which already works well there.
+  if (isIOS && navigator.canShare) {
     try {
       const file = new File([blob], filename, { type: 'application/msword' });
       if (navigator.canShare({ files: [file] })) {
@@ -591,7 +593,7 @@ async function deliverReport(mode){
     } catch (err) {
       // User cancelled the share sheet - that's not an error worth reporting.
       if (err && err.name === 'AbortError') return;
-      // Otherwise fall through to the options below.
+      // Otherwise fall through to the new-tab fallback below.
     }
   }
 
