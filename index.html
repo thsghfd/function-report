@@ -534,7 +534,11 @@ function showStatus(text, ms){
 function reportFilename(){
   const name = (val('eventName') || 'Function_Report').replace(/[^a-z0-9]+/gi, '_');
   const dateStr = val('date') || new Date().toISOString().slice(0,10);
-  return `${name}_${dateStr}.doc`;
+  const now = new Date();
+  const timeStr = String(now.getHours()).padStart(2,'0') +
+                  String(now.getMinutes()).padStart(2,'0') +
+                  String(now.getSeconds()).padStart(2,'0');
+  return `${name}_${dateStr}_${timeStr}.doc`;
 }
 
 function buildFile(){
