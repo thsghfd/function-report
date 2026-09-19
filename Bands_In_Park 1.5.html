@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Function Report</title>
+<style>
+  :root{
+    --paper:#FAF7F2;
+    --panel:#FFFFFF;
+    --ink:#2B2622;
+    --ink-soft:#6B6259;
+    --line:#E4DCD1;
+    --wine:#6E2A35;
+    --wine-soft:#F2E4E2;
+    --gold:#A9822F;
+    --ok:#3F6B4A;
+    --serif: 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    padding:0 0 80px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px;}
+
+  header.hero{
+    background:var(--wine);
+    color:#fff;
+    padding:26px 20px 22px;
+    margin-bottom:22px;
+  }
+  header.hero .wrap{display:flex;flex-direction:column;gap:4px;}
+  header.hero h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:2.1rem;
+    margin:0;
+    letter-spacing:0.2px;
+  }
+  header.hero p{
+    margin:2px 0 0;
+    color:#E9D6D3;
+    font-size:0.98rem;
+    max-width:46ch;
+  }
+
+  .section{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:26px 26px 20px;
+    margin-bottom:22px;
+  }
+  .section h2{
+    font-family:var(--serif);
+    font-size:1.15rem;
+    font-weight:600;
+    margin:0 0 18px;
+    padding-left:14px;
+    border-left:3px solid var(--wine);
+    color:var(--wine);
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-bottom:16px;
+  }
+  .row.three{grid-template-columns:1fr 1fr 1fr;}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+  .row .field{margin-bottom:0;}
+  label{
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  input[type=text], input[type=date], input[type=number], textarea, select{
+    font-family:var(--sans);
+    font-size:0.98rem;
+    padding:9px 11px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:#fff;
+    color:var(--ink);
+    width:100%;
+  }
+  textarea{resize:vertical;min-height:70px;}
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+    border-color:var(--gold);
+  }
+
+  input[type="date"]:not(.has-value)::-webkit-datetime-edit-year-field,
+  input[type="date"]:not(.has-value)::-webkit-datetime-edit-month-field,
+  input[type="date"]:not(.has-value)::-webkit-datetime-edit-day-field,
+  input[type="date"]:not(.has-value)::-webkit-datetime-edit-text{
+    color:transparent;
+  }
+
+  .charges-table{width:100%;border-collapse:collapse;margin-top:4px;}
+  .charges-table th{
+    text-align:left;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    font-weight:600;
+    padding:0 8px 8px 0;
+  }
+  .charges-table td{padding:5px 8px 5px 0;vertical-align:top;}
+  .charges-table td:first-child{
+    padding-top:9px;
+    font-weight:600;
+    font-size:0.92rem;
+    white-space:nowrap;
+    width:90px;
+  }
+  .charges-table input[type=number]{width:120px;}
+
+  .radio-group{display:flex;gap:18px;align-items:center;padding-top:4px;}
+  .radio-option{display:flex;align-items:center;gap:6px;font-size:0.92rem;}
+  .radio-option input{width:auto;}
+
+  .actions{
+    position:sticky;
+    bottom:0;
+    background:linear-gradient(180deg, rgba(250,247,242,0), var(--paper) 30%);
+    padding:20px 0 0;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--sans);
+    font-size:0.95rem;
+    font-weight:600;
+    padding:13px 22px;
+    border-radius:3px;
+    border:none;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--wine);color:#fff;}
+  .btn-primary:hover{background:#5A2129;}
+  .btn-secondary{background:#fff;color:var(--wine);border:1px solid var(--wine);}
+  .btn-secondary:hover{background:var(--wine-soft);}
+  .status{
+    font-size:0.85rem;
+    color:var(--ok);
+    align-self:center;
+    display:none;
+  }
+
+  .restore-banner{
+    background:var(--wine-soft);
+    border:1px solid var(--wine);
+    color:var(--wine);
+    border-radius:3px;
+    padding:12px 14px;
+    margin-bottom:18px;
+    font-size:0.9rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+  }
+  .banner-dismiss{
+    background:none;
+    border:none;
+    color:var(--wine);
+    text-decoration:underline;
+    cursor:pointer;
+    font-size:0.85rem;
+    white-space:nowrap;
+  }
+
+  .actions-footnote{
+    text-align:center;
+    padding-top:6px;
+  }
+  .link-btn{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:0.82rem;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  @media(max-width:600px){
+    .row, .row.three{grid-template-columns:1fr;}
+    header.hero{padding:30px 16px 26px;}
+    .section{padding:20px 18px 16px;}
+  }
+
+  @media print{
+    header.hero{background:none;color:var(--ink);padding:0 0 16px;}
+    header.hero p{color:var(--ink-soft);}
+    .actions{display:none;}
+    .section{border:none;padding:0;margin-bottom:20px;}
+    body{padding:0;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Function Report</h1>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="restoreBanner" class="restore-banner" style="display:none;">
+    <span id="restoreBannerText"></span>
+    <button type="button" id="dismissRestoreBanner" class="banner-dismiss">Dismiss</button>
+  </div>
+  <form id="reportForm">
+
+    <div class="section">
+      <div class="row">
+        <div class="field">
+          <label for="day">Day</label>
+          <input type="text" id="day">
+        </div>
+        <div class="field">
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+      </div>
+      <div class="field">
+        <label for="eventName">Event name</label>
+        <input type="text" id="eventName">
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="eventType">Event type</label>
+          <input type="text" id="eventType">
+        </div>
+        <div class="field">
+          <label for="room">Room</label>
+          <input type="text" id="room">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="supervisors">Supervisor/s</label>
+          <input type="text" id="supervisors">
+        </div>
+        <div class="field">
+          <label for="clientName">Client name</label>
+          <input type="text" id="clientName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="expectedPax">Expected pax</label>
+          <input type="number" id="expectedPax" min="0">
+        </div>
+        <div class="field">
+          <label for="actualPax">Actual pax</label>
+          <input type="number" id="actualPax" min="0">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="foodStyle">Food service style</label>
+          <input type="text" id="foodStyle">
+        </div>
+        <div class="field">
+          <label for="drinksStyle">Drinks service style</label>
+          <input type="text" id="drinksStyle">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Additional charges</h2>
+      <table class="charges-table">
+        <thead>
+          <tr><th></th><th>Comments</th><th>Amount ($)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Labour</td>
+            <td><input type="text" id="labourComments"></td>
+            <td><input type="number" id="labourAmount" step="0.01" min="0"></td>
+          </tr>
+          <tr>
+            <td>Beverages</td>
+            <td><input type="text" id="beverageComments"></td>
+            <td><input type="number" id="beverageAmount" step="0.01" min="0"></td>
+          </tr>
+          <tr>
+            <td>Food</td>
+            <td><input type="text" id="foodComments"></td>
+            <td><input type="number" id="foodAmount" step="0.01" min="0"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>RSA incidents</h2>
+      <div class="row">
+        <div class="field">
+          <label>Liquor incident report form completed</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="incidentCompleted" value="Yes"> Yes</label>
+            <label class="radio-option"><input type="radio" name="incidentCompleted" value="No"> No</label>
+            <label class="radio-option"><input type="radio" name="incidentCompleted" value="N/A"> N/A</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Liquor incident report form attached</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="incidentAttached" value="Yes"> Yes</label>
+            <label class="radio-option"><input type="radio" name="incidentAttached" value="No"> No</label>
+            <label class="radio-option"><input type="radio" name="incidentAttached" value="N/A"> N/A</label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="incidentDetails">Incident details</label>
+        <textarea id="incidentDetails" rows="4"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Injuries</h2>
+      <div class="field">
+        <textarea id="injuries" rows="4" placeholder="Details of any injuries during the event"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Major changes</h2>
+      <div class="field">
+        <textarea id="majorChanges" rows="4" placeholder="Any changes from the original booking/run sheet"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Staff</h2>
+      <div class="field">
+        <textarea id="staff" rows="3" placeholder="Names of staff rostered on shift"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>General comments</h2>
+      <div class="field">
+        <textarea id="generalComments" rows="5"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Client feedback</h2>
+      <div class="field">
+        <textarea id="clientFeedback" rows="5"></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" id="saveProgress">Save progress</button>
+      <button type="button" class="btn btn-primary" id="downloadWord">Download as Word document</button>
+      <button type="button" class="btn btn-secondary" id="emailReport">Email report</button>
+      <button type="button" class="btn btn-secondary" id="printPdf">Print / save as PDF</button>
+      <span class="status" id="statusMsg">Downloaded — now attach it to the email that opened.</span>
+    </div>
+    <div class="actions-footnote">
+      <button type="button" id="clearProgress" class="link-btn">Clear saved progress</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+const STORAGE_KEY = 'functionReportDraft_v1';
+
+const dateInput = document.getElementById('date');
+dateInput.addEventListener('input', () => {
+  dateInput.classList.toggle('has-value', !!dateInput.value);
+});
+
+// --- Save / restore progress (stored locally in this browser only) ---
+function collectFormData(){
+  const data = {};
+  document.querySelectorAll('#reportForm input[id], #reportForm textarea[id]').forEach(el => {
+    data[el.id] = el.value;
+  });
+  document.querySelectorAll('#reportForm input[type="radio"]:checked').forEach(el => {
+    data[el.name] = el.value;
+  });
+  return data;
+}
+
+function applyFormData(data){
+  Object.keys(data).forEach(key => {
+    const el = document.getElementById(key);
+    if (el) {
+      el.value = data[key];
+      if (el.id === 'date') dateInput.classList.toggle('has-value', !!el.value);
+      return;
+    }
+    const radio = document.querySelector(`input[name="${key}"][value="${CSS.escape(data[key])}"]`);
+    if (radio) radio.checked = true;
+  });
+}
+
+function saveProgress(silent){
+  const data = collectFormData();
+  data._savedAt = new Date().toISOString();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if (!silent) showStatus('Progress saved on this device.');
+  } catch (e) {
+    if (!silent) showStatus('Could not save — your browser may be blocking local storage.', 5000);
+  }
+}
+
+function loadSavedProgress(){
+  let raw;
+  try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { return; }
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    applyFormData(data);
+    const when = data._savedAt ? new Date(data._savedAt) : null;
+    const banner = document.getElementById('restoreBanner');
+    const text = document.getElementById('restoreBannerText');
+    text.textContent = when
+      ? `Restored your saved progress from ${when.toLocaleString()}.`
+      : 'Restored your saved progress.';
+    banner.style.display = 'flex';
+  } catch (e) { /* ignore corrupt saved data */ }
+}
+
+function clearSavedProgress(showMsg){
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  if (showMsg) showStatus('Saved progress cleared.');
+}
+
+document.getElementById('saveProgress').addEventListener('click', () => saveProgress(false));
+document.getElementById('clearProgress').addEventListener('click', () => {
+  if (confirm('Clear the progress saved on this device? This cannot be undone.')) {
+    clearSavedProgress(true);
+  }
+});
+document.getElementById('dismissRestoreBanner').addEventListener('click', () => {
+  document.getElementById('restoreBanner').style.display = 'none';
+});
+
+window.addEventListener('load', loadSavedProgress);
+
+function val(id){ return document.getElementById(id).value || ''; }
+function checkedVal(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '';
+}
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function buildReportHtml(){
+  return `
+  <html>
+  <head><meta charset="UTF-8"><title>Function Report</title></head>
+  <body style="font-family:Calibri, Arial, sans-serif; color:#2B2622; max-width:700px;">
+    <h1 style="color:#6E2A35; font-family:Georgia, serif; margin-bottom:0;">Function Report</h1>
+    <hr style="border:none;border-top:2px solid #6E2A35;margin:8px 0 20px;">
+
+    <h2 style="color:#6E2A35;">Function Information</h2>
+    <table style="border-collapse:collapse;width:100%;margin-bottom:20px;">
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;width:160px;">Day</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('day'))}</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;width:100px;">Date</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('date'))}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Event Name</td><td colspan="3" style="border:1px solid #ccc;padding:6px;">${esc(val('eventName'))}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Event Type</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('eventType'))}</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Room</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('room'))}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Supervisor/s</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('supervisors'))}</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Client Name</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('clientName'))}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Expected Pax</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('expectedPax'))}</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Actual Pax</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('actualPax'))}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Food Service Style</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('foodStyle'))}</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Drinks Service Style</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('drinksStyle'))}</td></tr>
+    </table>
+
+    <h2 style="color:#6E2A35;">Additional Charges</h2>
+    <table style="border-collapse:collapse;width:100%;margin-bottom:20px;">
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Item</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Comments</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Amount</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;">Labour</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('labourComments'))}</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('labourAmount'))}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;">Beverages</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('beverageComments'))}</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('beverageAmount'))}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;">Food</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('foodComments'))}</td><td style="border:1px solid #ccc;padding:6px;">${esc(val('foodAmount'))}</td></tr>
+    </table>
+
+    <h2 style="color:#6E2A35;">Any RSA Incidents</h2>
+    <table style="border-collapse:collapse;width:100%;margin-bottom:10px;">
+      <tr><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Liquor Incident Report Form Completed</td><td style="border:1px solid #ccc;padding:6px;">${esc(checkedVal('incidentCompleted'))}</td><td style="border:1px solid #ccc;padding:6px;font-weight:bold;">Liquor Incident Report Form Attached</td><td style="border:1px solid #ccc;padding:6px;">${esc(checkedVal('incidentAttached'))}</td></tr>
+    </table>
+    <p style="border:1px solid #ccc;padding:8px;min-height:60px;margin-bottom:20px;">${esc(val('incidentDetails'))}</p>
+
+    <h2 style="color:#6E2A35;">Injuries</h2>
+    <p style="border:1px solid #ccc;padding:8px;min-height:60px;margin-bottom:20px;">${esc(val('injuries'))}</p>
+
+    <h2 style="color:#6E2A35;">Major Changes</h2>
+    <p style="border:1px solid #ccc;padding:8px;min-height:60px;margin-bottom:20px;">${esc(val('majorChanges'))}</p>
+
+    <h2 style="color:#6E2A35;">Staff</h2>
+    <p style="border:1px solid #ccc;padding:8px;min-height:50px;margin-bottom:20px;">${esc(val('staff'))}</p>
+
+    <h2 style="color:#6E2A35;">General Comments</h2>
+    <p style="border:1px solid #ccc;padding:8px;min-height:80px;margin-bottom:20px;">${esc(val('generalComments'))}</p>
+
+    <h2 style="color:#6E2A35;">Client Feedback</h2>
+    <p style="border:1px solid #ccc;padding:8px;min-height:80px;">${esc(val('clientFeedback'))}</p>
+
+  </body>
+  </html>`;
+}
+
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+const RECIPIENTS = 'janeen.dyson@epicure.com.au,daniel.constantine@gema.com.au,sharon.hinds@gema.com.au,russell.woodworth@epicure.com.au,events.bch@epicure.com.au,ghadeer.almadhi@gema.com.au,david@gema.com.au';
+
+function showStatus(text, ms){
+  const status = document.getElementById('statusMsg');
+  status.textContent = text;
+  status.style.display = 'inline';
+  clearTimeout(status._t);
+  status._t = setTimeout(() => status.style.display = 'none', ms || 4000);
+}
+
+function reportFilename(){
+  const name = (val('eventName') || 'Function_Report').replace(/[^a-z0-9]+/gi, '_');
+  const dateStr = val('date') || new Date().toISOString().slice(0,10);
+  return `${name}_${dateStr}.doc`;
+}
+
+function buildFile(){
+  const html = buildReportHtml();
+  const filename = reportFilename();
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  return { blob, filename, html };
+}
+
+// Classic desktop/Android download via the <a download> attribute.
+function classicDownload(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// iOS fallback: open the report in a new tab so the user can use the
+// Share button to save it to Files or send it on.
+function openInNewTab(html){
+  const w = window.open('', '_blank');
+  if (w) {
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+    return true;
+  }
+  return false;
+}
+
+async function deliverReport(mode){
+  const { blob, filename, html } = buildFile();
+
+  // Best path on phones: native share sheet with the file attached.
+  // On iOS this opens Mail / Files / AirDrop with the doc already attached.
+  if (navigator.canShare) {
+    try {
+      const file = new File([blob], filename, { type: 'application/msword' });
+      if (navigator.canShare({ files: [file] })) {
+        const eventName = val('eventName') || 'Function Report';
+        const eventDate = val('date') || '';
+        await navigator.share({
+          files: [file],
+          title: `Function Report - ${eventName}`,
+          text: `Completed function report for ${eventName}${eventDate ? ' on ' + eventDate : ''}.`
+        });
+        showStatus('Shared. Pick Mail to send it on.');
+        return;
+      }
+    } catch (err) {
+      // User cancelled the share sheet - that's not an error worth reporting.
+      if (err && err.name === 'AbortError') return;
+      // Otherwise fall through to the options below.
+    }
+  }
+
+  if (isIOS) {
+    // iOS Safari ignores the download attribute, so show the report in a new
+    // tab; the user taps Share to save or email it.
+    const opened = openInNewTab(html);
+    if (opened) {
+      showStatus('Report opened in a new tab — tap Share to email or save it.', 7000);
+    } else {
+      showStatus('Please allow pop-ups for this page, then try again.', 7000);
+    }
+    if (mode === 'email') {
+      // Don't navigate away on iOS - it would close the tab we just opened.
+      showStatus('Report opened in a new tab — tap Share, then Mail, to send it.', 8000);
+    }
+    return;
+  }
+
+  // Desktop / Android
+  classicDownload(blob, filename);
+
+  if (mode === 'email') {
+    const eventName = val('eventName') || 'Function Report';
+    const eventDate = val('date') || '';
+    const subject = `Function Report - ${eventName}${eventDate ? ' - ' + eventDate : ''}`;
+    const body =
+      `Hi,\n\nPlease find attached the completed function report for ${eventName}${eventDate ? ' on ' + eventDate : ''}.\n\n` +
+      `(The report has just downloaded as "${filename}" - please attach it from your Downloads folder before sending.)\n\n` +
+      `Regards`;
+    const mailto = `mailto:${RECIPIENTS}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // Open in a detached way so the download isn't cancelled by navigation.
+    setTimeout(() => { window.open(mailto, '_blank'); }, 600);
+    showStatus('Downloaded — now attach it to the email that opened.', 6000);
+  } else {
+    showStatus('Saved to your downloads.');
+  }
+}
+
+document.getElementById('downloadWord').addEventListener('click', () => deliverReport('download'));
+document.getElementById('emailReport').addEventListener('click', () => deliverReport('email'));
+
+document.getElementById('printPdf').addEventListener('click', () => {
+  window.print();
+});
+</script>
+
+</body>
+</html>
