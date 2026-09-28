@@ -122,6 +122,17 @@
     width:90px;
   }
   .charges-table input[type=number]{width:120px;}
+  .charges-table td.cellar-note{
+    padding:8px 10px;
+    margin:0;
+    background:#fddede;
+    color:#c00000;
+    font-weight:700;
+    font-size:0.92rem;
+    white-space:normal;
+    width:auto;
+    border-radius:4px;
+  }
 
   .radio-group{display:flex;gap:18px;align-items:center;padding-top:4px;}
   .radio-option{display:flex;align-items:center;gap:6px;font-size:0.92rem;}
@@ -198,12 +209,30 @@
     .section{padding:20px 18px 16px;}
   }
 
+  @page{size:auto;margin:8mm;}
   @media print{
-    header.hero{background:none;color:var(--ink);padding:0 0 16px;}
+    body{padding:0;background:#fff;line-height:1.35;}
+    .wrap{max-width:none;padding:0;}
+    header.hero{background:none;color:var(--ink);padding:0 0 4px;margin-bottom:6px;}
+    header.hero h1{font-size:1.25rem;}
     header.hero p{color:var(--ink-soft);}
-    .actions{display:none;}
-    .section{border:none;padding:0;margin-bottom:20px;}
-    body{padding:0;}
+    .actions, .actions-footnote, .restore-banner{display:none !important;}
+    .section{border:none;padding:0;margin-bottom:20px;break-inside:avoid;page-break-inside:avoid;}
+    .section h2{font-size:0.95rem;margin:0 0 6px;padding-left:8px;}
+    .row{gap:10px;margin-bottom:6px;}
+    .field{gap:2px;margin-bottom:6px;}
+    label{font-size:0.72rem;}
+    input[type=text], input[type=date], input[type=number], textarea, select{
+      font-size:0.85rem;padding:4px 7px;
+    }
+    textarea{min-height:0;height:105px;resize:none;}
+    #incidentDetails{height:70px;}
+    .charges-table td{padding:2px 8px 2px 0;}
+    .charges-table td:first-child{padding-top:4px;font-size:0.82rem;}
+    .charges-table th{padding:0 8px 3px 0;}
+    .charges-table td.cellar-note{padding:4px 8px;font-size:0.8rem;}
+    .radio-group{padding-top:0;gap:14px;}
+    .radio-option{font-size:0.82rem;}
   }
 </style>
 </head>
@@ -297,6 +326,9 @@
             <td><input type="number" id="beverageAmount" step="0.01" min="0"></td>
           </tr>
           <tr>
+            <td colspan="3" class="cellar-note">Confirm consumption charges with Cellar Manager before finalising charges.</td>
+          </tr>
+          <tr>
             <td>Food</td>
             <td><input type="text" id="foodComments"></td>
             <td><input type="number" id="foodAmount" step="0.01" min="0"></td>
@@ -368,7 +400,6 @@
 
     <div class="actions">
       <button type="button" class="btn btn-secondary" id="saveProgress">Save progress</button>
-      <button type="button" class="btn btn-primary" id="downloadWord">Download as Word document</button>
       <button type="button" class="btn btn-secondary" id="emailReport">Email report</button>
       <button type="button" class="btn btn-secondary" id="printPdf">Print / save as PDF</button>
       <span class="status" id="statusMsg">Downloaded — now attach it to the email that opened.</span>
@@ -637,7 +668,6 @@ async function deliverReport(mode){
   }
 }
 
-document.getElementById('downloadWord').addEventListener('click', () => deliverReport('download'));
 document.getElementById('emailReport').addEventListener('click', () => deliverReport('email'));
 
 document.getElementById('printPdf').addEventListener('click', () => {
