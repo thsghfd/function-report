@@ -209,10 +209,10 @@
     .section{padding:20px 18px 16px;}
   }
 
-  @page{size:auto;margin:8mm;}
+  @page{size:auto;margin:8mm 14mm 8mm 8mm;}
   @media print{
     body{padding:0;background:#fff;line-height:1.35;}
-    .wrap{max-width:none;padding:0;}
+    .wrap{max-width:none;padding:0 4mm 0 0;}
     header.hero{background:none;color:var(--ink);padding:0 0 4px;margin-bottom:6px;}
     header.hero h1{font-size:1.25rem;}
     header.hero p{color:var(--ink-soft);}
@@ -552,7 +552,7 @@ function buildReportHtml(){
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-const RECIPIENTS = 'janeen.dyson@epicure.com.au,daniel.constantine@gema.com.au,sharon.hinds@gema.com.au,russell.woodworth@epicure.com.au,events.bch@epicure.com.au,ghadeer.almadhi@gema.com.au,david@gema.com.au,jamie@gema.com.au';
+const RECIPIENTS = 'janeen.dyson@epicure.com.au,daniel.constantine@gema.com.au,sharon.hinds@gema.com.au,russell.woodworth@epicure.com.au,events.bch@epicure.com.au,ghadeer.almadhi@gema.com.au,david@gema.com.au,jaimie@gema.com.au';
 
 function showStatus(text, ms){
   const status = document.getElementById('statusMsg');
